@@ -217,6 +217,8 @@ const chatGPTBrowserSchema = tConversationSchema
     model: 'text-davinci-002-render-sha',
   }));
 
+const DEFAULT_FUNCTION_MODEL = process.env.OPENAI_REVERSE_PROXY ? 'gpt-3.5-turbo-1106' : 'gpt-3.5-turbo';
+
 const gptPluginsSchema = tConversationSchema
   .pick({
     model: true,
@@ -231,7 +233,7 @@ const gptPluginsSchema = tConversationSchema
   })
   .transform((obj) => ({
     ...obj,
-    model: obj.model ?? 'gpt-3.5-turbo',
+    model: obj.model ?? DEFAULT_FUNCTION_MODEL,
     chatGptLabel: obj.chatGptLabel ?? null,
     promptPrefix: obj.promptPrefix ?? null,
     temperature: obj.temperature ?? 0.8,
@@ -242,12 +244,12 @@ const gptPluginsSchema = tConversationSchema
     agentOptions: obj.agentOptions ?? {
       agent: 'functions',
       skipCompletion: true,
-      model: 'gpt-3.5-turbo',
+      model: DEFAULT_FUNCTION_MODEL,
       temperature: 0,
     },
   }))
   .catch(() => ({
-    model: 'gpt-3.5-turbo',
+    model: DEFAULT_FUNCTION_MODEL,
     chatGptLabel: null,
     promptPrefix: null,
     temperature: 0.8,
@@ -258,7 +260,7 @@ const gptPluginsSchema = tConversationSchema
     agentOptions: {
       agent: 'functions',
       skipCompletion: true,
-      model: 'gpt-3.5-turbo',
+      model: DEFAULT_FUNCTION_MODEL,
       temperature: 0,
     },
   }));

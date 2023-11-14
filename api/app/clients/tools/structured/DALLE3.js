@@ -22,6 +22,7 @@ class DALLE3 extends Tool {
     if (PROXY) {
       config.httpAgent = new HttpsProxyAgent(PROXY);
     }
+    console.log(`DALLE3: config= ${JSON.stringify(config)}`);
 
     this.openai = new OpenAI(config);
     this.name = 'dalle';
@@ -91,7 +92,9 @@ class DALLE3 extends Tool {
 
   async _call(data) {
     const { prompt, quality = 'standard', size = '1024x1024', style = 'vivid' } = data;
+    console.log(`DALLE3: data=${JSON.stringify(data)}, ${size}, ${style}`);
     if (!prompt) {
+      console.log('DALLE3: Missing prompt');
       throw new Error('Missing required field: prompt');
     }
 
@@ -106,6 +109,7 @@ class DALLE3 extends Tool {
         n: 1,
       });
     } catch (error) {
+      console.log(`DALLE3: something wrong when trying to generate the image: ${error.message}`);
       return `Something went wrong when trying to generate the image. The DALL-E API may unavailable:
 Error Message: ${error.message}`;
     }

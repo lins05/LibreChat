@@ -56,7 +56,25 @@ If your reverse proxy is compatible to OpenAI specs in every other way, it may s
     this.actions.push(action);
   }
 
+  _getFunctionModelName_withReverseProxy(input) {
+    let proxy = process.env.OPENAI_REVERSE_PROXY;
+    if (proxy) {
+      if (input.includes('gpt-3')) {
+        return 'gpt-3.5-turbo-1106';
+      } else if (input.includes('gpt-4')) {
+        return 'gpt-4-1106-preview';
+      } else {
+        return 'gpt-3.5-turbo-1106';
+      }
+    }
+  }
+
   getFunctionModelName(input) {
+    let model = this._getFunctionModelName_withReverseProxy(input);
+    if (model) {
+      console.log(`GPTAPI: Choose function model ${model} for ${input}`);
+      return model;
+    }
     if (input.includes('gpt-3.5-turbo')) {
       return 'gpt-3.5-turbo';
     } else if (input.includes('gpt-4')) {

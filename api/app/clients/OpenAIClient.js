@@ -735,6 +735,7 @@ ${convo}
       }
 
       let chatCompletion;
+      console.log(`OpenAIClient: opts = ${JSON.stringify(opts)}`);
       const openai = new OpenAI({
         apiKey: this.apiKey,
         ...opts,
